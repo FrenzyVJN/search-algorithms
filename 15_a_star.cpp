@@ -1,11 +1,11 @@
-#include<iostream>
-#include<vector>
-#include<set>
-#include<queue>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <queue>
 #include "graph.h"
 
 struct AStarNode {
-    vector<string> path;
+    std::vector<std::string> path;
     int cost;
     int heuristic;
     bool operator>(const AStarNode &other) const {
@@ -13,32 +13,32 @@ struct AStarNode {
     }
 };
 
-void AStar(Graph &g, string start, string goal) {
-    priority_queue<AStarNode, vector<AStarNode>, greater<AStarNode>> pq;
+void AStar(Graph &g, std::string start, std::string goal) {
+    std::priority_queue<AStarNode, std::vector<AStarNode>, std::greater<AStarNode>> pq;
     pq.push({{start}, 0, g.heuristic[start]});
-    set<string> visited;
+    std::set<std::string> visited;
 
     while (!pq.empty()) {
         auto current = pq.top();
         pq.pop();
-        string node = current.path.back();
+        std::string node = current.path.back();
 
         if (node == goal) {
-            cout << "A* Path: ";
-            for (auto &p : current.path) cout << p << " ";
-            cout << "\nCost: " << current.cost 
-                 << " | Heuristic: " << current.heuristic 
-                 << " | Total: " << current.cost + current.heuristic << "\n";
+            std::cout << "A* Path: ";
+            for (auto &p : current.path) std::cout << p << " ";
+            std::cout << "\nCost: " << current.cost
+                      << " | Heuristic: " << current.heuristic
+                      << " | Total: " << current.cost + current.heuristic << "\n";
             return;
         }
 
         if (visited.count(node)) continue;
         visited.insert(node);
 
-        for (auto &neighbor : g.adj[node]) {
+        for (auto &[neighbor, weight] : g.weightedAdj[node]) {
             auto newPath = current.path;
             newPath.push_back(neighbor);
-            pq.push({newPath, current.cost + 1, g.heuristic[neighbor]});
+            pq.push({newPath, current.cost + weight, g.heuristic[neighbor]});
         }
     }
 }

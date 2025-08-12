@@ -23,21 +23,23 @@ void BranchAndBound(Graph &g, string start, string goal) {
         string node = current.path.back();
 
         if (node == goal) {
-            cout << "Branch & Bound Path: ";
+            cout << "Branch & Bound (Weighted) Path: ";
             for (auto &p : current.path) cout << p << " ";
-            cout << "\nCost: " << current.cost << "\n";
+            cout << "\nTotal cost: " << current.cost << "\n";
             return;
         }
 
         if (visited.count(node)) continue;
         visited.insert(node);
 
-        for (auto &neighbor : g.adj[node]) {
+        for (auto &[neighbor, weight] : g.weightedAdj[node]) {
             auto newPath = current.path;
             newPath.push_back(neighbor);
-            pq.push({newPath, current.cost + 1});
+            pq.push({newPath, current.cost + weight});
         }
     }
+
+    cout << "No path found.\n";
 }
 
 int main() {

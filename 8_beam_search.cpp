@@ -1,39 +1,51 @@
-#include<iostream>
-#include<set>
-#include<vector>
+#include <iostream>
+#include <set>
+#include <vector>
+#include <algorithm>
 #include "graph.h"
 
-void BeamSearch(Graph &g, string start, string goal, int beamWidth) {
-    vector<vector<string>> frontier = {{start}};
+using namespace std;
+
+void BeamSearchWeighted(Graph &g, string start, string goal, int beamWidth) {
+    vector<pair<vector<string>, int>> frontier = {{{start}, 0}};
     set<string> visited;
     visited.insert(start);
 
     while (!frontier.empty()) {
-        for (auto &path : frontier) {
-            if (path.back() == goal) {
-                cout << "Beam Search Path: ";
-                for (auto &p : path) cout << p << " ";
-                cout << "\n";
+        for (auto &p : frontier) {
+            if (p.first.back() == goal) {
+                cout << "Beam Search (Weighted) Path: ";
+                for (auto &node : p.first) cout << node << " ";
+                cout << "\nTotal Cost: " << p.second << "\n";
                 return;
             }
         }
 
-        vector<vector<string>> newFrontier;
-        for (auto &path : frontier) {
-            string node = path.back();
-            for (auto &neighbor : g.adj[node]) {
+        vector<pair<vector<string>, int>> newFrontier;
+        for (auto &p : frontier) {
+            string node = p.first.back();
+            for (auto &neighborPair : g.weightedAdj[node]) {
+                string neighbor = neighborPair.first;
+                int weight = neighborPair.second;
+
                 if (!visited.count(neighbor)) {
                     visited.insert(neighbor);
-                    auto newPath = path;
+                    auto newPath = p.first;
                     newPath.push_back(neighbor);
-                    newFrontier.push_back(newPath);
+                    int newCost = p.second + weight;
+                    newFrontier.push_back({newPath, newCost});
                 }
             }
         }
 
-        sort(newFrontier.begin(), newFrontier.end(), [&](auto &a, auto &b) {
-            return g.heuristic[a.back()] < g.heuristic[b.back()];
-        });
+
+        sort(newFrontier.begin(), newFrontier.end(),
+             [&](auto &a, auto &b) {
+                 int f_a = a.second + g.heuristic[a.first.back()];
+                 int f_b = b.second + g.heuristic[b.first.back()];
+                 return f_a < f_b;
+             });
+
 
         if ((int)newFrontier.size() > beamWidth) {
             newFrontier.resize(beamWidth);
@@ -47,6 +59,6 @@ void BeamSearch(Graph &g, string start, string goal, int beamWidth) {
 
 int main() {
     Graph g = createGraph();
-    BeamSearch(g, "S", "G", 2);
+    BeamSearchWeighted(g, "S", "G", 2);
     return 0;
 }

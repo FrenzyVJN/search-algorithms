@@ -1,6 +1,7 @@
-#include<iostream>
-#include<set>
-#include<vector>
+#include <iostream>
+#include <set>
+#include <vector>
+#include <algorithm>
 #include "graph.h"
 
 void BeamSearchHistory(Graph &g, string start, string goal, int beamWidth) {
@@ -25,6 +26,17 @@ void BeamSearchHistory(Graph &g, string start, string goal, int beamWidth) {
         vector<vector<string>> newFrontier;
         for (auto &path : frontier) {
             string node = path.back();
+
+            for (auto &[neighbor, weight] : g.weightedAdj[node]) {
+                if (!visited.count(neighbor)) {
+                    visited.insert(neighbor);
+                    history.push_back(neighbor);
+                    auto newPath = path;
+                    newPath.push_back(neighbor);
+                    newFrontier.push_back(newPath);
+                }
+            }
+
             for (auto &neighbor : g.adj[node]) {
                 if (!visited.count(neighbor)) {
                     visited.insert(neighbor);

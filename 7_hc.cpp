@@ -1,12 +1,15 @@
-#include<iostream>
-#include<set>
-#include<vector>
+#include <iostream>
+#include <string>
+#include <unordered_set>
 #include "graph.h"
 
-void HillClimbing(Graph &g, string start, string goal) {
+using namespace std;
+
+void hillClimbing(Graph &g, const string &start, const string &goal) {
     string current = start;
-    vector<string> path = {start};
-    set<string> visited;
+    unordered_set<string> visited;
+
+    cout << "Hill Climbing path: " << current;
 
     while (current != goal) {
         visited.insert(current);
@@ -14,29 +17,31 @@ void HillClimbing(Graph &g, string start, string goal) {
         string nextNode = "";
         int bestHeuristic = INT_MAX;
 
-        for (auto &neighbor : g.adj[current]) {
-            if (!visited.count(neighbor) && g.heuristic[neighbor] < bestHeuristic) {
-                bestHeuristic = g.heuristic[neighbor];
-                nextNode = neighbor;
+        for (auto &neighbor : g.weightedAdj[current]) {
+            const string &node = neighbor.first;
+            if (visited.count(node) == 0) {
+                int h = g.heuristic[node];
+                if (h < bestHeuristic) {
+                    bestHeuristic = h;
+                    nextNode = node;
+                }
             }
         }
 
-        if (nextNode == "") {
-            cout << "Stuck at: " << current << " (local maxima)\n";
-            break;
+        if (nextNode.empty()) {
+            cout << "\nNo better neighbor found. Stuck at local optimum.\n";
+            return;
         }
 
-        path.push_back(nextNode);
         current = nextNode;
+        cout << " -> " << current;
     }
 
-    cout << "Hill Climbing Path: ";
-    for (auto &p : path) cout << p << " ";
-    cout << "\n";
+    cout << "\nGoal reached!\n";
 }
 
 int main() {
     Graph g = createGraph();
-    HillClimbing(g, "S", "G");
+    hillClimbing(g, "S", "G");
     return 0;
 }

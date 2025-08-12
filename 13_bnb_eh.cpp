@@ -2,7 +2,6 @@
 #include <vector>
 #include <set>
 #include <queue>
-
 #include "graph.h"
 
 struct PathCostH {
@@ -25,21 +24,24 @@ void BranchAndBoundEH(Graph &g, string start, string goal) {
         string node = current.path.back();
 
         if (node == goal) {
-            cout << "Branch & Bound (EH) Path: ";
+            cout << "Branch & Bound with Estimated Heuristic (Weighted) Path: ";
             for (auto &p : current.path) cout << p << " ";
-            cout << "\nCost+Heuristic: " << current.cost + current.heuristic << "\n";
+            cout << "\nTotal cost: " << current.cost
+                 << "\nCost + Heuristic: " << current.cost + current.heuristic << "\n";
             return;
         }
 
         if (visited.count(node)) continue;
         visited.insert(node);
 
-        for (auto &neighbor : g.adj[node]) {
+        for (auto &[neighbor, weight] : g.weightedAdj[node]) {
             auto newPath = current.path;
             newPath.push_back(neighbor);
-            pq.push({newPath, current.cost + 1, g.heuristic[neighbor]});
+            pq.push({newPath, current.cost + weight, g.heuristic[neighbor]});
         }
     }
+
+    cout << "No path found.\n";
 }
 
 int main() {

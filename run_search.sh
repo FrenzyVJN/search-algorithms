@@ -37,7 +37,7 @@ while true; do
         src="${files[$choice]}"
         exe="${src%.cpp}.out"
         echo "Compiling $src..."
-        g++ "$src" -o "$exe"
+        g++ -std=c++17 "$src" -o "$exe"
         if [[ $? -eq 0 ]]; then
             echo "Running $exe..."
             echo "---------------------------------"

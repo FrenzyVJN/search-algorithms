@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.tsx": "typescriptreact",
+        "set": "cpp",
+        "queue": "cpp",
+        "__config": "cpp"
+    }
+}
