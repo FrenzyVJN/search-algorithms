@@ -2,6 +2,7 @@
 #include "graph.h"
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -39,8 +40,10 @@ void britishMuseumSearch(Graph &g, string start, string goal)
     cout << "All possible paths from " << start << " to " << goal << ":\n";
     for (auto &p : allPaths)
     {
-        for (auto &node : p)
-            cout << node << " ";
+        for (size_t i = 0; i < p.size(); ++i) {
+            cout << p[i];
+            if (i != p.size() - 1) cout << " -> ";
+        }
         cout << "\n";
     }
 }

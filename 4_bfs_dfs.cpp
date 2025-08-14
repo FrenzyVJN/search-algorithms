@@ -1,5 +1,6 @@
 #include<iostream>
 #include "graph.h"
+#include <algorithm>
 
 bool DLS(Graph &g, string current, string goal, int depth, vector<string> &path) {
     if (depth == 0 && current == goal) {
@@ -23,7 +24,10 @@ void IDDFS(Graph &g, string start, string goal, int maxDepth) {
         vector<string> path;
         if (DLS(g, start, goal, depth, path)) {
             cout << "IDDFS Path found at depth " << depth << ": ";
-            for (auto &p : path) cout << p << " ";
+            for (size_t i = 0; i < path.size(); ++i) {
+                cout << path[i];
+                if (i != path.size() - 1) cout << " -> ";
+            }
             cout << "\n";
             return;
         }

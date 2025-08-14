@@ -44,8 +44,10 @@ void DFS(Graph &g, string start, string goal)
     if (found)
     {
         cout << "DFS Path found: ";
-        for (auto &p : path)
-            cout << p << " ";
+        for (size_t i = 0; i < path.size(); ++i) {
+            cout << path[i];
+            if (i != path.size() - 1) cout << " -> ";
+        }
         cout << "\n";
     }
     else

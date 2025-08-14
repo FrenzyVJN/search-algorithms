@@ -25,7 +25,10 @@ void BranchAndBoundEH(Graph &g, string start, string goal) {
 
         if (node == goal) {
             cout << "Branch & Bound with Estimated Heuristic (Weighted) Path: ";
-            for (auto &p : current.path) cout << p << " ";
+            for (size_t i = 0; i < current.path.size(); ++i) {
+                cout << current.path[i];
+                if (i != current.path.size() - 1) cout << " -> ";
+            }
             cout << "\nTotal cost: " << current.cost
                  << "\nCost + Heuristic: " << current.cost + current.heuristic << "\n";
             return;

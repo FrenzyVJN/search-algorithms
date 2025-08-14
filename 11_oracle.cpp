@@ -2,6 +2,7 @@
 #include <vector>
 #include <limits>
 #include "graph.h"
+#include <algorithm>
 
 void OracleUtil(Graph &g, string current, string goal, vector<string> &path, int currentCost, vector<string> &bestPath, int &bestCost) {
     if (current == goal) {
@@ -33,7 +34,10 @@ void OracleSearch(Graph &g, string start, string goal) {
 
     if (!bestPath.empty()) {
         cout << "Oracle (Optimal Weighted) Path: ";
-        for (auto &p : bestPath) cout << p << " ";
+        for (size_t i = 0; i < bestPath.size(); ++i) {
+            cout << bestPath[i];
+            if (i != bestPath.size() - 1) cout << " -> ";
+        }
         cout << "\nTotal cost: " << bestCost << "\n";
     } else {
         cout << "No path found.\n";

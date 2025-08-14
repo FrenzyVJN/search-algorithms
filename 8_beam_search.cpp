@@ -15,7 +15,10 @@ void BeamSearchWeighted(Graph &g, string start, string goal, int beamWidth) {
         for (auto &p : frontier) {
             if (p.first.back() == goal) {
                 cout << "Beam Search (Weighted) Path: ";
-                for (auto &node : p.first) cout << node << " ";
+                for (size_t i = 0; i < p.first.size(); ++i) {
+                    cout << p.first[i];
+                    if (i != p.first.size() - 1) cout << " -> ";
+                }
                 cout << "\nTotal Cost: " << p.second << "\n";
                 return;
             }

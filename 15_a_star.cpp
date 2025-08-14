@@ -25,7 +25,10 @@ void AStar(Graph &g, std::string start, std::string goal) {
 
         if (node == goal) {
             std::cout << "A* Path: ";
-            for (auto &p : current.path) std::cout << p << " ";
+            for (size_t i = 0; i < current.path.size(); ++i) {
+                std::cout << current.path[i];
+                if (i != current.path.size() - 1) std::cout << " -> ";
+            }
             std::cout << "\nCost: " << current.cost
                       << " | Heuristic: " << current.heuristic
                       << " | Total: " << current.cost + current.heuristic << "\n";
